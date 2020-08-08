@@ -1,0 +1,4 @@
+/.idea/
+/target/
+/kafka-template.iml
+/ci/logs/

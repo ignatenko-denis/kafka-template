@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/test;AUTO_SERVER=TRUE;MODE=PostgreSQL;
+    username: sa
+    password: sa
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: storage
+      auto-offset-reset: earliest
+      properties:
+        isolation:
+          level: read_committed
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
