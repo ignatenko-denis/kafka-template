@@ -1,6 +1,5 @@
 package com.sample.kafka;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.sample.SampleAPI;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -25,9 +24,11 @@ public class Consumer {
 
     private SampleAPI.UserRq parseRq(byte[] data) {
         try {
-            return SampleAPI.UserRq.parseFrom(data);
-        } catch (InvalidProtocolBufferException e) {
-            log.error("cannot parse", e);
+            return SampleAPI.UserRq.newBuilder()
+                    .mergeFrom(data)
+                    .build();
+        } catch (Exception e) {
+            log.error("Check *.proto file. Cannot parse data", e);
         }
 
         return null;

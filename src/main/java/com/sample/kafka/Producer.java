@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -15,7 +16,7 @@ public class Producer {
     public static final String TOPIC = "test-topic";
 
     @Autowired
-    private KafkaTemplate template;
+    private KafkaTemplate<String, byte[]> template;
 
     @Scheduled(fixedDelay = 1000)
     public void send() {
@@ -23,7 +24,8 @@ public class Producer {
                 .setName("" + getRandom())
                 .build();
 
-        template.send(TOPIC, rq.toByteArray());
+        template.send(TOPIC, UUID.randomUUID().toString(), rq.toByteArray())
+                .addCallback(new KafkaListenableFutureCallback());
         log.info("send: {}", rq.getName());
     }
 
